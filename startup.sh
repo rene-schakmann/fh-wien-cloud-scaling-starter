@@ -1,9 +1,7 @@
 #!/bin/bash
-sudo yum update -y
-sudo yum install docker -y
-sudo usermod -a -G docker ec2-user
-id ec2-user
-newgrp docker
-sudo systemctl enable docker.service
-sudo systemctl start docker.service
-sudo docker run --name mynginx1 -p 80:80 -d nginx
+# Runs as root via EC2 user data (Amazon Linux 2023)
+dnf update -y
+dnf install -y docker
+usermod -a -G docker ec2-user
+systemctl enable --now docker.service
+docker run --name mynginx1 --restart unless-stopped -p 80:80 -d nginx
